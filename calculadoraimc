@@ -1,0 +1,77 @@
+from tkinter import *
+
+# Cores
+cor_fundo = '#f0f0f0'  # Fundo cinza claro para o fundo geral
+cor_texto = '#333333'  # Cinza escuro para o texto
+cor_campo = '#e0e0e0'  # Cinza médio para os campos de entrada
+cor_botao = '#cccccc'  # Cinza para os botões
+cor_resultado = '#e6e6e6'  # Fundo do resultado
+cor_titulo_bg = '#000000'  # Fundo preto para o título
+cor_titulo_fg = '#ffffff'  # Texto branco para o título
+
+# Configuração da Janela
+janela = Tk()
+janela.title('Calculadora de IMC')
+janela.geometry("500x500")
+janela.configure(bg=cor_fundo)
+
+# Função para Calcular IMC
+def calcular():
+    try:
+        nome = e_nome.get().strip()
+        peso = float(e_peso.get())
+        altura = float(e_altura.get())
+        
+        if not nome or altura <= 0 or peso <= 0:
+            raise ValueError("Valores inválidos")
+        
+        resultado = peso / (altura ** 2)
+        categoria = "Abaixo do peso" if resultado < 18.5 else "Normal" if resultado < 25 else "Sobrepeso" if resultado < 30 else "Obesidade"
+        
+        l_resultado_valor['text'] = f"{resultado:.2f}"
+        l_resultado_texto['text'] = f"{nome}, seu IMC indica: {categoria}"
+    except ValueError:
+        l_resultado_valor['text'] = "---"
+        l_resultado_texto['text'] = "Insira valores válidos."
+
+# Função Reiniciar
+def reiniciar():
+    e_nome.delete(0, END)
+    e_peso.delete(0, END)
+    e_altura.delete(0, END)
+    l_resultado_valor['text'] = "---"
+    l_resultado_texto['text'] = ""
+
+# Título
+titulo = Label(janela, text='Calculadora de IMC', font=('Arial', 18, 'bold'), bg=cor_titulo_bg, fg=cor_titulo_fg)
+titulo.pack(fill="x", pady=10)
+
+# Campos de Entrada
+Label(janela, text="Nome:", font=('Arial', 12), bg=cor_fundo, fg=cor_texto).pack(pady=5)
+e_nome = Entry(janela, font=('Arial', 12), bg=cor_campo, fg=cor_texto)
+e_nome.pack(pady=5)
+
+Label(janela, text="Peso (kg):", font=('Arial', 12), bg=cor_fundo, fg=cor_texto).pack(pady=5)
+e_peso = Entry(janela, font=('Arial', 12), bg=cor_campo, fg=cor_texto)
+e_peso.pack(pady=5)
+
+Label(janela, text="Altura (m):", font=('Arial', 12), bg=cor_fundo, fg=cor_texto).pack(pady=5)
+e_altura = Entry(janela, font=('Arial', 12), bg=cor_campo, fg=cor_texto)
+e_altura.pack(pady=5)
+
+# Bloco de Resultado
+l_resultado_valor = Label(janela, text="---", font=('Arial', 24, 'bold'), bg=cor_resultado, fg=cor_texto)
+l_resultado_valor.pack(pady=10)
+
+l_resultado_texto = Label(janela, text="", font=('Arial', 12), bg=cor_fundo, fg=cor_texto)
+l_resultado_texto.pack(pady=10)
+
+# Botões
+frame_botoes = Frame(janela, bg=cor_fundo)
+frame_botoes.pack(pady=10)
+
+Button(frame_botoes, text='Calcular', font=('Arial', 12), bg=cor_botao, fg=cor_texto, command=calcular).pack(side=LEFT, padx=5)
+Button(frame_botoes, text='Reiniciar', font=('Arial', 12), bg=cor_botao, fg=cor_texto, command=reiniciar).pack(side=LEFT, padx=5)
+Button(frame_botoes, text='Sair', font=('Arial', 12), bg=cor_botao, fg=cor_texto, command=janela.quit).pack(side=LEFT, padx=5)
+
+janela.mainloop()
